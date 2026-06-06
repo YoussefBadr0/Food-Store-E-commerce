@@ -1,0 +1,106 @@
+﻿@model FoodProject.ViewModel.SignUpViewModel
+
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+
+        <div class="card shadow-sm border-0 mt-5">
+            <div class="card-body p-4 p-md-5">
+
+                <div class="text-center mb-4">
+                    <i class="bi bi-person-plus-fill text-success" style="font-size: 3rem;"></i>
+                    <h2 class="h3 fw-bold mt-2 mb-1">Create an Account</h2>
+                    <p class="text-muted small mb-0">Join FoodStore and start shopping fresh</p>
+                </div>
+
+                <form asp-action="Register" asp-controller="Register" method="post" class="needs-validation">
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <!-- First Name -->
+                    <div class="mb-3">
+                        <label asp-for="FirstName" class="form-label fw-semibold">
+                            <i class="bi bi-person me-1"></i> First Name
+                        </label>
+                        <input asp-for="FirstName" class="form-control form-control-lg" placeholder="Enter your first name" />
+                        <span asp-validation-for="FirstName" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Last Name -->
+                    <div class="mb-3">
+                        <label asp-for="LastName" class="form-label fw-semibold">
+                            <i class="bi bi-person-vcard me-1"></i> Last Name
+                        </label>
+                        <input asp-for="LastName" class="form-control form-control-lg" placeholder="Enter your last name" />
+                        <span asp-validation-for="LastName" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label fw-semibold">
+                            <i class="bi bi-envelope me-1"></i> Email
+                        </label>
+                        <input asp-for="Email" type="email" class="form-control form-control-lg" placeholder="name@example.com" />
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Username -->
+                    <div class="mb-3">
+                        <label asp-for="UserName" class="form-label fw-semibold">
+                            <i class="bi bi-person-badge me-1"></i> Username
+                        </label>
+                        <input asp-for="UserName" class="form-control form-control-lg" placeholder="Choose a username" />
+                        <span asp-validation-for="UserName" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label fw-semibold">
+                            <i class="bi bi-lock me-1"></i> Password
+                        </label>
+                        <input asp-for="Password" type="password" class="form-control form-control-lg" placeholder="Create a password" />
+                        <span asp-validation-for="Password" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class="mb-4">
+                        <label asp-for="ConfirmPassword" class="form-label fw-semibold">
+                            <i class="bi bi-shield-lock me-1"></i> Confirm Password
+                        </label>
+                        <input asp-for="ConfirmPassword" type="password" class="form-control form-control-lg" placeholder="Re-enter your password" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="d-grid mb-3">
+                        <button type="submit" class="btn btn-success btn-lg fw-semibold">
+                            <i class="bi bi-person-check me-1"></i> Register
+                        </button>
+                    </div>
+
+                    <!-- Links -->
+                    <div class="text-center">
+                        <p class="text-muted small mb-2">
+                            Already have an account?
+                            <a asp-controller="Login" asp-action="Index" class="text-success fw-semibold text-decoration-none">Sign In</a>
+                        </p>
+                        <a asp-controller="Home" asp-action="Index" class="text-muted small text-decoration-none">
+                            <i class="bi bi-arrow-left"></i> Back to Home
+                        </a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

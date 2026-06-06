@@ -1,0 +1,56 @@
+﻿@model List<FoodProject.Models.Contact>
+@{
+    ViewData["Title"] = "Contact List";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="mb-1"><i class="bi bi-envelope text-success"></i> Contact List</h2>
+        <p class="text-muted mb-0">Messages sent through the contact form</p>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Surname</th>
+                        <th>E-Mail</th>
+                        <th>Subject</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var x in Model)
+                    {
+                        <tr>
+                            <td class="text-muted">#@x.ContactId</td>
+                            <td class="fw-semibold">@x.ContactName</td>
+                            <td>@x.ContactSurname</td>
+                            <td><a href="mailto:@x.ContactEmail" class="text-decoration-none">@x.ContactEmail</a></td>
+                            <td><span class="badge bg-light text-dark">@x.ContactSubject</span></td>
+                            <td class="text-end">
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <a asp-controller="Contact" asp-action="Details" asp-route-id="@x.ContactId" class="btn btn-outline-info" title="Details">
+                                        <i class="bi bi-eye"></i> Details
+                                    </a>
+                                    <form asp-controller="Contact" asp-action="Delete" asp-route-id="@x.ContactId" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-outline-danger" title="Delete"
+                                                onclick="return confirm('Are you sure you want to delete this message?');">
+                                            <i class="bi bi-trash"></i> Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

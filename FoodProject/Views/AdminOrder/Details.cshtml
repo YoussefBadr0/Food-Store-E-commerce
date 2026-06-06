@@ -1,0 +1,114 @@
+﻿@using FoodProject.Enums
+@model FoodProject.Models.Order
+@{
+    ViewData["Title"] = $"Order #{Model.OrderId}";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0"><i class="bi bi-receipt text-success"></i> Order #@Model.OrderId</h2>
+    <a asp-action="Index" asp-controller="AdminOrder" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Back to Orders
+    </a>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <h5 class="fw-bold mb-3">Order Items</h5>
+                @foreach (var item in Model.OrderItems)
+                {
+                    <div class="d-flex align-items-center gap-3 mb-3 pb-3 border-bottom">
+                        <img src="~/images/products/@item.ImageSnapshot"
+                             alt="@item.ProductNameSnapshot"
+                             style="width:65px;height:65px;object-fit:cover;"
+                             class="rounded" />
+                        <div class="flex-grow-1">
+                            <div class="fw-semibold">@item.ProductNameSnapshot</div>
+                            <div class="small text-muted">
+                                @item.UnitPriceSnapshot.ToString("N2") x @item.Quantity
+                            </div>
+                        </div>
+                        <span class="fw-bold text-success">@item.SubTotal.ToString("N2") EGP</span>
+                    </div>
+                }
+                <div class="d-flex justify-content-end fw-bold h5 mt-2">
+                    <span class="me-3">Total:</span>
+                    <span class="text-success">@Model.TotalAmount.ToString("N2") EGP</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card shadow-sm border-0 mb-3">
+            <div class="card-body p-4">
+                <h5 class="fw-bold mb-3">Customer Info</h5>
+                <ul class="list-unstyled small mb-0">
+                    <li class="mb-2">
+                        <span class="text-muted">Username:</span>
+                        <span class="ms-1 fw-semibold">@Model.AppUser?.UserName</span>
+                    </li>
+                    <li class="mb-2">
+                        <span class="text-muted">Phone:</span>
+                        <span class="ms-1">@Model.Phone</span>
+                    </li>
+                    <li class="mb-2">
+                        <span class="text-muted">City:</span>
+                        <span class="ms-1">@Model.City</span>
+                    </li>
+                    <li>
+                        <span class="text-muted">Address:</span>
+                        <span class="ms-1">@Model.ShippingAddress</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-0 mb-3">
+            <div class="card-body p-4">
+                <h5 class="fw-bold mb-3">Update Status</h5>
+                @{
+                    var badgeClass = Model.Status switch
+                    {
+                        OrderStatus.Pending => "bg-warning text-dark",
+                        OrderStatus.Processing => "bg-info text-dark",
+                        OrderStatus.Shipped => "bg-primary",
+                        OrderStatus.Delivered => "bg-success",
+                        OrderStatus.Cancelled => "bg-danger",
+                        _ => "bg-secondary"
+                    };
+                }
+                <span class="badge @badgeClass mb-3">Current: @Model.Status</span>
+
+                <form asp-action="UpdateStatus" asp-controller="AdminOrder" method="post">
+                    <input type="hidden" name="id" value="@Model.OrderId" />
+                    <select name="status" class="form-select mb-3">
+                        @foreach (var status in Enum.GetValues<OrderStatus>())
+                        {
+                            <option value="@status" selected="@(Model.Status == status)">@status</option>
+                        }
+                    </select>
+                    <button type="submit" class="btn btn-success w-100">
+                        <i class="bi bi-check-circle me-1"></i> Update Status
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <h6 class="text-danger fw-bold">Delete Order</h6>
+                <p class="small text-muted mb-3">This will permanently delete the order and all its items.</p>
+                <form asp-action="Delete" asp-controller="AdminOrder" method="post">
+                    <input type="hidden" name="id" value="@Model.OrderId" />
+                    <button type="submit" class="btn btn-danger w-100"
+                            onclick="return confirm('Are you sure you want to delete Order #@Model.OrderId?')">
+                        <i class="bi bi-trash me-1"></i> Delete Order
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

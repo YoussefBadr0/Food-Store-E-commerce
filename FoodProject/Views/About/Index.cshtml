@@ -1,0 +1,39 @@
+﻿@model FoodProject.Models.About
+@{
+    ViewData["Title"] = "About";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="mb-1"><i class="bi bi-info-circle text-success"></i> About</h2>
+        <p class="text-muted mb-0">Manage your store's about section</p>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <td class="text-muted">#@Model.AboutId</td>
+                        <td class="fw-semibold">@Model.AboutTitle</td>
+                        <td class="text-muted">@Model.AboutText</td>
+                        <td>
+                            <img src="~/images/about/@Model.AboutImageUrl"
+                                 alt="@Model.AboutTitle"
+                                 class="rounded"
+                                 style="width:200px;height:100px;object-fit:cover;" />
+                        </td>
+                        <td class="text-end">
+                            <a asp-action="Update" asp-controller="About" asp-route-id="@Model.AboutId" class="btn btn-sm btn-outline-success">
+                                <i class="bi bi-pencil-square"></i> Update
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,56 @@
+﻿@model IList<FoodProject.Models.AppUser>
+@{
+    ViewData["Title"] = "Manage Admins";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0"><i class="bi bi-people text-success"></i> Manage Admins</h2>
+    <a asp-action="AddAdmin" asp-controller="Settings" class="btn btn-success">
+        <i class="bi bi-person-plus"></i> Add Admin
+    </a>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table mb-0 align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var admin in Model)
+                    {
+                        <tr>
+                            <td class="fw-semibold">@admin.FirstName @admin.LastName</td>
+                            <td>@admin.UserName</td>
+                            <td>@admin.Email</td>
+                            <td>
+                                @if (admin.UserName != User.Identity!.Name)
+                                {
+                                    <form asp-action="RemoveAdmin" asp-controller="Settings" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="userId" value="@admin.Id" />
+                                        <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                onclick="return confirm('Remove admin role from @admin.UserName?')">
+                                            <i class="bi bi-person-dash"></i> Remove Admin
+                                        </button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success">You</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

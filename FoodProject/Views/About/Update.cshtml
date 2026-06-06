@@ -1,0 +1,69 @@
+﻿@model FoodProject.ViewModel.AboutUpdateViewModel
+@{
+    ViewData["Title"] = "About Update";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="mb-1"><i class="bi bi-pencil-square text-success"></i> Update About</h2>
+        <p class="text-muted mb-0">Edit your store's about content</p>
+    </div>
+    <a asp-action="Index" asp-controller="About" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Back to List
+    </a>
+</div>
+
+<form asp-action="Update" asp-controller="About" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="All" class="alert alert-danger small py-2"></div>
+
+    <input type="hidden" asp-for="AboutId" />
+    <input type="hidden" asp-for="CurrentImageUrl" />
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <div class="mb-3">
+                        <label asp-for="AboutTitle" class="form-label fw-semibold">About Title</label>
+                        <input asp-for="AboutTitle" class="form-control" placeholder="Enter about title" />
+                        <span asp-validation-for="AboutTitle" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="AboutText" class="form-label fw-semibold">About Text</label>
+                        <textarea asp-for="AboutText" rows="12" cols="3" class="form-control" placeholder="Enter about description"></textarea>
+                        <span asp-validation-for="AboutText" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">About Image</label>
+                        <input type="file" name="ImageFile" class="form-control" accept="image/*" />
+                        <small class="text-muted">Leave empty to keep the current image.</small>
+                    </div>
+                    <div class="d-flex gap-2 justify-content-end">
+                        <a asp-action="Index" asp-controller="About" class="btn btn-outline-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-check-lg"></i> Update
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <h6 class="fw-semibold mb-3"><i class="bi bi-image text-success"></i> Current Image</h6>
+                    @if (!string.IsNullOrEmpty(Model.CurrentImageUrl))
+                    {
+                        <img src="~/images/about/@Model.CurrentImageUrl"
+                             alt="@Model.AboutTitle"
+                             class="img-fluid rounded border" />
+                    }
+                    else
+                    {
+                        <div class="text-muted text-center py-4">No image uploaded</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,96 @@
+﻿@model IEnumerable<FoodProject.Models.Product>
+@{
+    ViewData["Title"] = "Food Inventory Management";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h2 mb-1 fw-bold text-dark text-capitalize">Food Asset Registry</h1>
+        <p class="text-muted mb-0">System interface overview tracking real-time food catalog updates</p>
+    </div>
+    <a href="@Url.Action("Create", "Product")" class="btn btn-primary d-flex align-items-center gap-2 px-4 shadow-sm">
+        <i class="bi bi-plus-lg"></i> Add New Product
+    </a>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light text-secondary">
+                <tr>
+                    <th scope="col" class="ps-4">Food Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Stock Status</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Visual Thumbnail</th>
+                    <th scope="col" class="text-center" style="width: 300px;">Control Routines</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var x in Model)
+                    {
+                        <tr>
+                            <td class="fw-semibold text-dark ps-4">@x.Name</td>
+                            <td class="text-success fw-bold">$@x.Price</td>
+                            <td>
+                                @if (x.Stock <= 0)
+                                {
+                                    <span class="badge bg-danger bg-opacity-10 text-danger px-2 py-1">Out of Stock</span>
+                                }
+                                else if (x.Stock < 10)
+                                {
+                                    <span class="badge bg-warning bg-opacity-10 text-warning px-2 py-1">Low Stock (@x.Stock)</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success bg-opacity-10 text-success px-2 py-1">In Stock (@x.Stock)</span>
+                                }
+                            </td>
+                            <td>
+                                <span class="text-muted small fw-medium">@(x.Category?.Name ?? "Unassigned")</span>
+                            </td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(x.ImageUrl))
+                                {
+                                    <img src="~/images/products/@x.ImageUrl" alt="@x.Name" class="rounded border shadow-sm" style="width:70px; height:50px; object-fit:cover;" />
+                                }
+                                else
+                                {
+                                    <span class="text-muted small italic">No Asset</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="d-flex justify-content-center gap-2 pe-3">
+                                    <a href="@Url.Action("Details", "Product", new { id = x.ProductId })" class="btn btn-sm btn-outline-info d-inline-flex align-items-center gap-1">
+                                        <i class="bi bi-eye"></i> Info
+                                    </a>
+                                    <a href="@Url.Action("Edit", "Product", new { id = x.ProductId })" class="btn btn-sm btn-outline-success d-inline-flex align-items-center gap-1">
+                                        <i class="bi bi-pencil"></i> Edit
+                                    </a>
+                                    <form action="@Url.Action("Delete", "Product", new { id = x.ProductId })" method="post" class="d-inline" onsubmit="return confirm('Execute cascading deletion for this asset item row entry permanently?');">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-sm btn-outline-danger d-inline-flex align-items-center gap-1">
+                                            <i class="bi bi-trash"></i> Drop
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-5">
+                            <i class="bi bi-folder-x display-4 text-secondary d-block mb-2"></i>
+                            No available records mapped into the food catalog schema array yet.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

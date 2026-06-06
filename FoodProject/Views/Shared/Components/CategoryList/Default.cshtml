@@ -1,0 +1,12 @@
+﻿@model IEnumerable<FoodProject.Models.Category>
+
+<ul class="list-unstyled">
+    @foreach (var category in Model)
+    {
+        <li>
+            <a href="/Product?category=@category.CategoryId">
+                @category.Name
+            </a>
+        </li>
+    }
+</ul>

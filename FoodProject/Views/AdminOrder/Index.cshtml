@@ -1,0 +1,90 @@
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using FoodProject.Enums
+@model IPagedList<FoodProject.Models.Order>
+@{
+    ViewData["Title"] = "Orders Management";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0"><i class="bi bi-bag-check text-success"></i> Orders Management</h2>
+    <span class="badge bg-success fs-6">@Model.TotalItemCount Orders</span>
+</div>
+
+<div class="mb-4 d-flex gap-2 flex-wrap">
+    <a asp-action="Index" asp-controller="AdminOrder"
+       class="btn btn-sm @(ViewBag.CurrentStatus == null ? "btn-success" : "btn-outline-success")">
+        All
+    </a>
+    @foreach (var status in Enum.GetValues<OrderStatus>())
+    {
+        <a asp-action="Index" asp-controller="AdminOrder" asp-route-status="@status.ToString()"
+           class="btn btn-sm @(ViewBag.CurrentStatus == status.ToString() ? "btn-success" : "btn-outline-secondary")">
+            @status
+        </a>
+    }
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-0">
+        <table class="table mb-0 align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>#Order</th>
+                    <th>Customer</th>
+                    <th>Date</th>
+                    <th>Items</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model)
+                {
+                    <tr>
+                        <td class="fw-semibold">#@order.OrderId</td>
+                        <td>
+                            <div class="small fw-semibold">@order.AppUser?.UserName</div>
+                            <div class="small text-muted">@order.City</div>
+                        </td>
+                        <td>@order.OrderDate.ToString("MMM dd, yyyy")</td>
+                        <td>@order.OrderItems.Count item(s)</td>
+                        <td class="fw-semibold text-success">@order.TotalAmount.ToString("N2") EGP</td>
+                        <td>
+                            @{
+                                var badgeClass = order.Status switch
+                                {
+                                    OrderStatus.Pending => "bg-warning text-dark",
+                                    OrderStatus.Processing => "bg-info text-dark",
+                                    OrderStatus.Shipped => "bg-primary",
+                                    OrderStatus.Delivered => "bg-success",
+                                    OrderStatus.Cancelled => "bg-danger",
+                                    _ => "bg-secondary"
+                                };
+                            }
+                            <span class="badge @badgeClass">@order.Status</span>
+                        </td>
+                        <td>
+                            <a asp-action="Details" asp-controller="AdminOrder" asp-route-id="@order.OrderId"
+                               class="btn btn-sm btn-outline-success">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="mt-4 d-flex justify-content-center">
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, status = ViewBag.CurrentStatus }),
+    new PagedListRenderOptions
+    {
+        LiElementClasses = new[] { "page-item" },
+        PageClasses = new[] { "page-link" },
+        UlElementClasses = new[] { "pagination" }
+    })
+</div>

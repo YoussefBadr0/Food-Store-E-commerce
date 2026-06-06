@@ -1,0 +1,24 @@
+﻿@model FoodProject.Models.About
+@{
+    ViewData["Title"] = "About Us";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-5">
+    <div class="row align-items-center g-5">
+        <div class="col-lg-6">
+            @if (!string.IsNullOrEmpty(Model?.AboutImageUrl))
+            {
+                <img src="~/images/about/@Model.AboutImageUrl"
+                     alt="@Model.AboutTitle"
+                     class="img-fluid rounded shadow" />
+            }
+        </div>
+        <div class="col-lg-6">
+            <h1 class="fw-bold mb-4">@Model?.AboutTitle</h1>
+            <p class="lead text-muted" style="white-space: pre-wrap;">
+                @Model?.AboutText
+            </p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,15 @@
+﻿@model IEnumerable<FoodProject.Models.Category>
+
+<ul class="list-unstyled mb-0">
+    @foreach (var category in Model)
+    {
+        <li class="mb-2">
+            <a asp-controller="Home"
+               asp-action="CategoryDetails"
+               asp-route-id="@category.CategoryId"
+               class="text-decoration-none text-dark fw-medium link-success">
+                @category.Name
+            </a>
+        </li>
+    }
+</ul>
